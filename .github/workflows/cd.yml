@@ -33,7 +33,6 @@ jobs:
           override: true
           profile: minimal
           target: ${{ matrix.target }}
-          toolchain: stable
 
       - name: Cache
         uses: Swatinem/rust-cache@v1
