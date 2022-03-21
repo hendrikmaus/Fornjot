@@ -77,3 +77,66 @@ jobs:
         with:
           name: ${{ env.PROJ_NAME }}-${{ matrix.target }}.exe
           path: ${{ env.PROJ_NAME }}-${{ matrix.target }}.exe
+
+  release:
+    name: Release
+    needs: binaries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+
+      - name: Operator | Cache
+        uses: Swatinem/rust-cache@v1
+        with:
+          key: release-operator-01
+          working-directory: ./release-operator
+
+      - name: Operator | Deduce
+        id: release
+        working-directory: release-operator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_LABEL: autorelease
+          RUST_LOG: info
+        run: |
+          # Run release operator
+          cargo run
+          # todo remove after testing
+          echo "::set-output name=release-detected::true"
+
+      - name: Binaries | Download
+        if: ${{ steps.release.outputs.release-detected == 'true' }}
+        uses: actions/download-artifact@v3
+
+      - name: Binaries | Compress
+        if: ${{ steps.release.outputs.release-detected == 'true' }}
+        run: |
+          # Compress pre-compiled binaries
+          for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
+            tar czvf "${file}.tar.gz" "${file}" 
+          done
+
+      - name: Binaries | Checksums
+        if: ${{ steps.release.outputs.release-detected == 'true' }}
+        run: |
+          # Build archive checksum
+          for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
+            openssl dgst -sha256 -r "${file}" \
+              | awk '{print $1}' > "${file}.sha256"
+          done
+
+      - name: Create GitHub Release
+        if: ${{ steps.release.outputs.release-detected == 'true' }}
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          tag_name: ${{ steps.release.outputs.tag-name }}
+          name: ${{ steps.release.outputs.tag-name }}
+          files: ${{ env.PROJ_NAME }}-*/${{ env.PROJ_NAME }}-*
