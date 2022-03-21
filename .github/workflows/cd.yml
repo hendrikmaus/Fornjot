@@ -2,7 +2,8 @@ name: Continuous Deployment
 
 on:
   push:
-    branches: [ main ]
+    # todo remove feature branch after testing
+    branches: [ main, activate-release-operator ]
 
 env:
   CARGO_TERM_COLOR: always
