@@ -139,6 +139,8 @@ jobs:
         if: ${{ steps.release.outputs.release-detected == 'true' }}
         uses: softprops/action-gh-release@v0.1.14
         with:
-          tag_name: ${{ steps.release.outputs.tag-name }}
+          # todo change back after testing
+          #tag_name: ${{ steps.release.outputs.tag-name }}
+          tag_name: v1.42.0
           name: ${{ steps.release.outputs.tag-name }}
           files: ${{ env.PROJ_NAME }}-*/${{ env.PROJ_NAME }}-*
