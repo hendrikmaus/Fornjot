@@ -121,6 +121,7 @@ jobs:
         run: |
           # Compress pre-compiled binaries
           for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
+            echo "Compressing: ${file}"
             tar czvf "${file}.tar.gz" "${file}" 
           done
 
@@ -129,6 +130,7 @@ jobs:
         run: |
           # Build archive checksum
           for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
+            echo "Calculating checksum for: ${file}"
             openssl dgst -sha256 -r "${file}" \
               | awk '{print $1}' > "${file}.sha256"
           done
