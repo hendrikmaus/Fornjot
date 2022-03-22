@@ -123,7 +123,7 @@ jobs:
         run: |
           # Compress pre-compiled binaries
           for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
-            echo "Compressing: $(basename ${filename})"
+            echo "Compressing: $(basename ${file})"
             chmod +x "${file}"
             tar czf "${file}.tar.gz" -C "${file}" . 
             rm "${file}"
