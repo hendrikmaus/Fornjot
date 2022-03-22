@@ -125,7 +125,8 @@ jobs:
           for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
             echo "Compressing: $(basename ${file})"
             chmod +x "${file}"
-            tar czf "${file}.tar.gz" -C "$(dirname ${file})" .
+            touch "${file}.tar.gz"
+            tar --exclude "${file}.tar.gz" -czf "${file}.tar.gz" -C "$(dirname ${file})" .
             rm "${file}"
           done
 
