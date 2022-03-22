@@ -106,7 +106,7 @@ jobs:
         working-directory: release-operator
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_LABEL: autorelease
+          RELEASE_LABEL: release
           RUST_LOG: info
         run: |
           # Run release operator
