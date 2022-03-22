@@ -126,7 +126,7 @@ jobs:
             echo "Compressing: $(basename ${file})"
             chmod +x "${file}"
             touch "${file}.tar.gz"
-            tar --exclude "${file}.tar.gz" -czf "${file}.tar.gz" -C "$(dirname ${file})" .
+            tar --exclude="${file}.tar.gz" -czf "${file}.tar.gz" -C "$(dirname ${file})" .
             rm "${file}"
           done
 
