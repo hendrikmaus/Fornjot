@@ -38,7 +38,6 @@ jobs:
           override: true
           profile: minimal
           target: ${{ matrix.target }}
-          toolchain: stable
 
       - name: Cache
         uses: Swatinem/rust-cache@v1
@@ -83,7 +82,6 @@ jobs:
       - name: Setup Toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
           override: true
           profile: minimal
 
