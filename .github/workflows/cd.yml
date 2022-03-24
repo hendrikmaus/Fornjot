@@ -110,18 +110,6 @@ jobs:
         if: ${{ steps.release.outputs.release-detected == 'true' }}
         uses: actions/download-artifact@v3
 
-      - name: Binaries | Compress
-        if: ${{ steps.release.outputs.release-detected == 'true' }}
-        run: |
-          # Compress pre-compiled binaries
-          for file in "${PROJ_NAME}"-*/"${PROJ_NAME}"-*; do
-            echo "Compressing: $(basename ${file})"
-            chmod +x "${file}"
-            touch "${file}.tar.gz"
-            tar --exclude="${file}.tar.gz" -czf "${file}.tar.gz" -C "$(dirname ${file})" .
-            rm "${file}"
-          done
-
       - name: Binaries | Checksums
         if: ${{ steps.release.outputs.release-detected == 'true' }}
         run: |
