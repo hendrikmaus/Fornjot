@@ -95,7 +95,7 @@ jobs:
 
       - name: Operator | Deduce
         id: release
-        working-directory: release-operator
+        working-directory: ./release-operator
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_LABEL: release
